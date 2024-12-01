@@ -1,0 +1,104 @@
+/* 页面基础样式 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #4a90e2;
+    margin-bottom: 10px;
+}
+
+/* 容器样式，左右分栏 */
+.container {
+    display: flex;
+    width: 80%;
+    max-width: 1000px;
+    margin: 0 auto;
+    justify-content: space-between;
+}
+
+/* 左侧和右侧的样式 */
+.left, .right {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 48%;
+}
+
+/* 文件上传按钮样式 */
+input[type="file"] {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* 提交按钮样式 */
+button {
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #357abd;
+}
+
+/* 下拉框样式 */
+select {
+    margin-top: 10px;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* 单选框和标签样式 */
+input[type="radio"] {
+    margin-right: 5px;
+    margin-left: 10px;
+}
+
+label {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+/* 下载链接样式 */
+#download-link a, #onnx-download-link a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+#download-link a:hover, #onnx-download-link a:hover {
+    background-color: #388e3c;
+}
+
+/* 模型结构显示样式 */
+#model-structure {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Quantization and ONNX Conversion</title>
+    <link rel="stylesheet" href="/static/index2.css">
+</head>
+<body>
+    <h1>Model Quantization & Conversion</h1>
+
+    <div class="container">
+        <!-- 左侧：量化 -->
+        <div class="left">
+            <h2>Quantize Model</h2>
+            <form id="quantize-form" enctype="multipart/form-data">
+                <label for="model-upload">上传模型</label>
+                <input type="file" id="model-upload" name="file">
+
+                <div>
+                    <label>量化类型:</label>
+                    <input type="radio" id="int8" name="quantization_type" value="int8" checked>
+                    <label for="int8">int8</label>
+                    <input type="radio" id="int4" name="quantization_type" value="int4">
+                    <label for="int4">int4</label>
+                </div>
+
+                <label for="model-type">模型类型:</label>
+                <select id="model-type" name="model_type">
+                    <option value="pytorch">PyTorch</option>
+                    <option value="tensorflow">TensorFlow</option>
+                </select>
+
+                <button type="submit">量化</button>
+            </form>
+
+            <div id="download-link" style="display:none;">
+                <a id="download-btn" href="#">下载量化模型</a>
+            </div>
+
+            <div id="model-structure" style="display:none;">
+                <h3>模型结构:</h3>
+                <pre id="model-structure-output"></pre>
+            </div>
+        </div>
+
+        <!-- 右侧：转换为 ONNX -->
+        <div class="right">
+            <h2>Convert PyTorch to ONNX</h2>
+            <form id="convert-form" enctype="multipart/form-data">
+                <label for="onnx-model-upload">上传pytorch模型</label>
+                <input type="file" id="onnx-model-upload" name="file">
+                <button type="submit">转换</button>
+            </form>
+
+            <div id="onnx-download-link" style="display:none;">
+                <a id="onnx-download-btn" href="#">下载 ONNX 模型</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 处理量化模型表单提交
+        document.getElementById('quantize-form').onsubmit = async function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            const fileInput = document.getElementById('model-upload');
+            const quantizationType = document.querySelector('input[name="quantization_type"]:checked').value;
+            const modelType = document.getElementById('model-type').value;
+
+            formData.append('file', fileInput.files[0]);
+            formData.append('quantization_type', quantizationType);
+            formData.append('model_type', modelType);
+
+            const response = await fetch('/quantize/', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById('download-btn').href = `/download/?quantized_model=${result.quantized_model_path}`;
+                document.getElementById('download-link').style.display = 'block';
+                document.getElementById('model-structure-output').textContent = result.model_structure;
+                document.getElementById('model-structure').style.display = 'block';
+            }
+        };
+
+        // 处理转换为 ONNX 表单提交
+        document.getElementById('convert-form').onsubmit = async function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            const fileInput = document.getElementById('onnx-model-upload');
+            formData.append('file', fileInput.files[0]);
+
+            const response = await fetch('/convert/', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById('onnx-download-btn').href = result.onnx_model_path;
+                document.getElementById('onnx-download-link').style.display = 'block';
+            }
+        };
+    </script>
+</body>
+</html>

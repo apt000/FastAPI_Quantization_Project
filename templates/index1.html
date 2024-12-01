@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Quantization</title>
+    <link rel="stylesheet" href="/static/index1.css">
+</head>
+<body>
+    <h1>Quantize Model</h1>
+
+    <!-- 上传表单 -->
+    <form id="quantize-form" enctype="multipart/form-data">
+        <label for="model-upload">Upload Model</label>
+        <input type="file" id="model-upload" name="file">
+
+        <!-- 量化位数选择 -->
+        <div>
+            <label>Quantization Type:</label>
+            <input type="radio" id="int8" name="quantization_type" value="int8" checked>
+            <label for="int8">int8</label>
+            <input type="radio" id="int4" name="quantization_type" value="int4">
+            <label for="int4">int4</label>
+        </div>
+
+        <!-- 模型框架选择 -->
+        <label for="model-type">Model Type:</label>
+        <select id="model-type" name="model_type">
+            <option value="pytorch">PyTorch</option>
+            <option value="tensorflow">TensorFlow</option>
+        </select>
+
+        <button type="submit">Quantize Model</button>
+    </form>
+
+    <!-- 下载链接 -->
+    <div id="download-link" style="display:none;">
+        <a id="download-btn" href="#">Download Quantized Model</a>
+    </div>
+
+    <!-- 模型结构输出 -->
+    <div id="model-structure" style="display:none;">
+        <h3>Model Structure:</h3>
+        <pre id="model-structure-output"></pre>
+    </div>
+
+    <script>
+        document.getElementById('quantize-form').onsubmit = async function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            const fileInput = document.getElementById('model-upload');
+            const quantizationType = document.querySelector('input[name="quantization_type"]:checked').value;
+            const modelType = document.getElementById('model-type').value;
+
+            formData.append('file', fileInput.files[0]);
+            formData.append('quantization_type', quantizationType);
+            formData.append('model_type', modelType);
+
+            const response = await fetch('/quantize/', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            document.getElementById('download-link').style.display = 'block';
+            document.getElementById('download-btn').href = `/download/?quantized_model=${result.quantized_model_path}`;
+
+            document.getElementById('model-structure').style.display = 'block';
+            document.getElementById('model-structure-output').textContent = result.model_structure;
+        };
+    </script>
+</body>
+</html>

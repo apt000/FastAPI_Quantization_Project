@@ -1,0 +1,13 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+}
+
+#upload-form {
+    margin-bottom: 20px;
+}
+
+#download-link {
+    margin-top: 20px;
+}

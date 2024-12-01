@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Quantization</title>
+    <link rel="stylesheet" href="../static/index.css">
+</head>
+<body>
+    <h1>Quantize Model</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <label for="model-upload">上传pytorch模型 (.pt文件)</label><br>
+        <input type="file" id="model-upload" name="file" accept=".pt">
+        <button type="submit">量化模型</button>
+    </form><br>
+    <div id="download-link" style="display:none;">
+        <br><a id="download-btn" href="#">下载量化后的模型</a>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').onsubmit = async function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            const fileInput = document.getElementById('model-upload');
+            formData.append('file', fileInput.files[0]);
+
+            const response = await fetch('/upload/', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            document.getElementById('download-link').style.display = 'block';
+            document.getElementById('download-btn').href = `/download/?quantized_model=${result.quantized_model_path}`;
+        };
+    </script>
+</body>
+</html>

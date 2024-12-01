@@ -1,0 +1,22 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+}
+
+#quantize-form {
+    margin-bottom: 20px;
+}
+
+#download-link, #model-structure {
+    margin-top: 20px;
+}
+
+#model-structure {
+    text-align: left;
+}
+
+h3 {
+    text-align: center;
+    margin-top: 40px;
+}
